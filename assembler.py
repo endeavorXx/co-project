@@ -1,1 +1,2 @@
-print("Hello this is co project")
+f = open("input.txt")
+print(f.readline())
