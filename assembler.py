@@ -1,3 +1,11 @@
+def decimal_to_binary(num):
+    binary = ""
+    while num!=0:
+        binary += str(num%2)
+        num = num//2
+    binary = binary[::-1]
+    return binary
+
 opcode = {
     "add":"00000",
     "sub":"00001",
@@ -24,12 +32,13 @@ opcode = {
 
 registers = {
     "R0":"000",
-    "R1":"000",
-    "R2":"000",
-    "R3":"000",
-    "R4":"000",
-    "R5":"000",
-    "R6":"000",
+    "R1":"001",
+    "R2":"010",
+    "R3":"011",
+    "R4":"100",
+    "R5":"101",
+    "R6":"110",
     "FLAGS":"111"
              }
 
+print(decimal_to_binary(12))
