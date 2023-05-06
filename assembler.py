@@ -18,9 +18,6 @@ def Find_addr(label,list1):
             ss+=b
             return ss
 
-
-
-
 def choose_register(reg_num):
     "This function returns opcode of registers"
     return registers[reg_num]
@@ -168,28 +165,24 @@ for i in range(nlines):
     elif query[0]=="jmp":
         code +=opcode["jmp"]
         code +="0000"
-        code +=Find_addr(query[1],List_of_words)
+        code +=Find_addr(query[1][:-1],List_of_words)
         w.write(code)
 
     elif query[0]=="jlt":
         code +=opcode["jlt"]
         code +="0000"
-        code += Find_addr(query[1], List_of_words)
+        code += Find_addr(query[1][:-1], List_of_words)
         w.write(code)
 
     elif query[0]=="jgt":
         code += opcode["jgt"]
         code += "0000"
-        code += Find_addr(query[1], List_of_words)
+        code += Find_addr(query[1][:-1], List_of_words)
         w.write(code)
 
     elif query[0]=="je":
         code += opcode["je"]
         code += "0000"
-        code += Find_addr(query[1], List_of_words)
+        code += Find_addr(query[1][:-1], List_of_words)
         w.write(code)
-
-
-
-
 
