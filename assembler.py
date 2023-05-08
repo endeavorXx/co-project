@@ -157,11 +157,11 @@ for i in range(nlines):
     elif ((len(query) == 3) & (query[0] == "mov" or query[0] == "div" or query[0] == "not" or query[0] == "cmp") & (
             query[2] in registers)):
         if(query[0]=="mov"):
-            code += opcode[query[0]][1] + "00000" + \
+            code += opcode[query[0]][1] + "00000" + 
                 registers[query[1]] + registers[query[2]] + "\n"
             w.write(code)
         else:
-            code += opcode[query[0]] + "00000" + \
+            code += opcode[query[0]] + "00000" + 
                 registers[query[1]] + registers[query[2]] + "\n"
             w.write(code)
 
