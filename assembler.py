@@ -7,16 +7,18 @@ def decimal_to_binary(num):
     binary = binary[::-1]  # reverses string
     return binary
 
-def Find_addr(label,list1):
+
+def Find_addr(label, list1):
     "This function finds the address of a label used for jump statements"
-    ss=""
+    ss = ""
     for i in range(len(list1)):
-        if label==list1[i][0]:
-            b=decimal_to_binary(i)
+        if label == list1[i][0]:
+            b = decimal_to_binary(i)
             for j in range(7-len(b)):
-                ss+="0"
-            ss+=b
+                ss += "0"
+            ss += b
             return ss
+
 
 def choose_register(reg_num):
     "This function returns opcode of registers"
@@ -27,7 +29,8 @@ def sevenbitbin(abc):
     a = len(abc)
     return ("0" * (7 - a) + abc)
 
-
+var_add={}
+var_count=0
 opcode = {
     "add": "00000",
     "sub": "00001",
@@ -66,17 +69,17 @@ w = open("output.txt", "a")
 nlines = len(f.readlines())
 f.seek(0)
 
-sentence_list=f.read().split("\n")
-List_of_words=[line.split() for line in sentence_list]
+sentence_list = f.read().split("\n")
+List_of_words = [line.split() for line in sentence_list]
 f.seek(0)
 
 for i in range(nlines):
     query = f.readline().strip().split(" ")
     code = ""
     print(query)
-    
+
     # Type A instruction
-    
+
     if query[0] == "add":
         code += opcode["add"]
         code += "00"
@@ -84,7 +87,6 @@ for i in range(nlines):
         code += choose_register(query[2])
         code += choose_register(query[3]) + "\n"
         w.write(code)
-
 
     elif query[0] == "sub":
         code += opcode["sub"]
@@ -94,7 +96,6 @@ for i in range(nlines):
         code += choose_register(query[3]) + "\n"
         w.write(code)
 
-
     elif query[0] == "mul":
         code += opcode["mul"]
         code += "00"
@@ -102,7 +103,6 @@ for i in range(nlines):
         code += choose_register(query[2])
         code += choose_register(query[3]) + "\n"
         w.write(code)
-
 
     elif query[0] == "xor":
         code += opcode["xor"]
@@ -112,7 +112,6 @@ for i in range(nlines):
         code += choose_register(query[3]) + "\n"
         w.write(code)
 
-
     elif query[0] == "or":
         code += opcode["or"]
         code += "00"
@@ -121,7 +120,6 @@ for i in range(nlines):
         code += choose_register(query[3]) + "\n"
         w.write(code)
 
-
     elif query[0] == "and":
         code += opcode["and"]
         code += "00"
@@ -129,7 +127,6 @@ for i in range(nlines):
         code += choose_register(query[2])
         code += choose_register(query[3]) + "\n"
         w.write(code)
-
 
     # Type B instruction
     elif ((query[0] == "mov") & (query[2][0] == "$")):
@@ -159,38 +156,43 @@ for i in range(nlines):
     # Type C instruction
     elif ((len(query) == 3) & (query[0] == "mov" or query[0] == "div" or query[0] == "not" or query[0] == "cmp") & (
             query[2] in registers)):
-        code += opcode[query[0]][1] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
+        code += opcode[query[0]][1] + "00000" + \
+            registers[query[1]] + registers[query[2]] + "\n"
         w.write(code)
 
-    #Type E instruction
-    
-    elif query[0]=="jmp":
-        code +=opcode["jmp"]
-        code +="0000"
-        code +=Find_addr(query[1][:-1],List_of_words)
-        w.write(code)
+    # Type E instruction
 
-    elif query[0]=="jlt":
-        code +=opcode["jlt"]
-        code +="0000"
+    elif query[0] == "jmp":
+        code += opcode["jmp"]
+        code += "0000"
         code += Find_addr(query[1][:-1], List_of_words)
         w.write(code)
 
-    elif query[0]=="jgt":
+    elif query[0] == "jlt":
+        code += opcode["jlt"]
+        code += "0000"
+        code += Find_addr(query[1][:-1], List_of_words)
+        w.write(code)
+
+    elif query[0] == "jgt":
         code += opcode["jgt"]
         code += "0000"
         code += Find_addr(query[1][:-1], List_of_words)
         w.write(code)
 
-    elif query[0]=="je":
+    elif query[0] == "je":
         code += opcode["je"]
         code += "0000"
         code += Find_addr(query[1][:-1], List_of_words)
         w.write(code)
-        
+
     # Type F instruction
-    
-    elif query[0]=="hlt":
+
+    elif query[0] == "hlt":
         code += opcode["hlt"]
         code += "0"*11 + "\n"
         w.write(code)
+#Var declaration
+    elif query[0] == "var":
+        var_add[query[1]]=sevenbitbin(decimal_to_binary(var_count))
+        var_count+=1
