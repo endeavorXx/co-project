@@ -74,7 +74,9 @@ for i in range(nlines):
     query = f.readline().strip().split(" ")
     code = ""
     print(query)
+    
     # Type A instruction
+    
     if query[0] == "add":
         code += opcode["add"]
         code += "00"
@@ -185,4 +187,10 @@ for i in range(nlines):
         code += "0000"
         code += Find_addr(query[1][:-1], List_of_words)
         w.write(code)
-
+        
+    # Type F instruction
+    
+    elif query[0]=="hlt":
+        code += opcode["hlt"]
+        code += "0"*11 + "\n"
+        w.write(code)
