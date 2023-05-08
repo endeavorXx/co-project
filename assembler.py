@@ -78,131 +78,129 @@ for i in range(nlines):
     code = ""
     print(query)
 
+    if (len(query)==2):
+    # Var declaration
+        if query[0] == "var":
+            var_add[query[1]] = sevenbitbin(decimal_to_binary(var_count))
+            var_count += 1
     # Type A instruction
-
-    if query[0] == "add":
-        code += opcode["add"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
-
-    elif query[0] == "sub":
-        code += opcode["sub"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
-
-    elif query[0] == "mul":
-        code += opcode["mul"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
-
-    elif query[0] == "xor":
-        code += opcode["xor"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
-
-    elif query[0] == "or":
-        code += opcode["or"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
-
-    elif query[0] == "and":
-        code += opcode["and"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
-
-    # Type B instruction
-    elif ((query[0] == "mov") & (query[2][0] == "$")):
-        code += opcode["mov"][0]
-        code += "0"
-        code += choose_register(query[1])
-        num = int(query[2][1:])
-        code += sevenbitbin(decimal_to_binary(num)) + "\n"
-        w.write(code)
-
-    elif query[0] == "rs":
-        code += opcode["rs"]
-        code += "0"
-        code += choose_register(query[1])
-        num = int(query[2][1:])
-        code += sevenbitbin(decimal_to_binary(num)) + "\n"
-        w.write(code)
-
-    elif query[0] == "ls":
-        code += opcode["ls"]
-        code += "0"
-        code += choose_register(query[1])
-        num = int(query[2][1:])
-        code += sevenbitbin(decimal_to_binary(num)) + "\n"
-        w.write(code)
-
-    # Type C instruction
-    elif ((len(query) == 3) & (query[0] == "mov" or query[0] == "div" or query[0] == "not" or query[0] == "cmp") & (
-            query[2] in registers)):
-        if(query[0]=="mov"):
-            code += opcode[query[0]][1] + "00000" + 
-                registers[query[1]] + registers[query[2]] + "\n"
+    else:
+        if query[0] == "add":
+            code += opcode["add"]
+            code += "00"
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
             w.write(code)
-        else:
-            code += opcode[query[0]] + "00000" + 
-                registers[query[1]] + registers[query[2]] + "\n"
+
+        elif query[0] == "sub":
+            code += opcode["sub"]
+            code += "00"
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
             w.write(code)
-             #type d instruction
-    elif (query[0]=="ld" or query[0]=="st"):
-        code+=opcode[query[0]]+"0"+"\n"
-        register[query[1]]+var_add[query[2]]+"\n"
-        w.write(code)
 
-    # Type E instruction
+        elif query[0] == "mul":
+            code += opcode["mul"]
+            code += "00"
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
 
-    elif query[0] == "jmp":
-        code += opcode["jmp"]
-        code += "0000"
-        code += Find_addr(query[1][:-1], List_of_words)
-        w.write(code)
+        elif query[0] == "xor":
+            code += opcode["xor"]
+            code += "00"
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
 
-    elif query[0] == "jlt":
-        code += opcode["jlt"]
-        code += "0000"
-        code += Find_addr(query[1][:-1], List_of_words)
-        w.write(code)
+        elif query[0] == "or":
+            code += opcode["or"]
+            code += "00"
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
 
-    elif query[0] == "jgt":
-        code += opcode["jgt"]
-        code += "0000"
-        code += Find_addr(query[1][:-1], List_of_words)
-        w.write(code)
+        elif query[0] == "and":
+            code += opcode["and"]
+            code += "00"
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
 
-    elif query[0] == "je":
-        code += opcode["je"]
-        code += "0000"
-        code += Find_addr(query[1][:-1], List_of_words)
-        w.write(code)
+        # Type B instruction
+        elif ((query[0] == "mov") & (query[2][0] == "$")):
+            code += opcode["mov"][0]
+            code += "0"
+            code += choose_register(query[1])
+            num = int(query[2][1:])
+            code += sevenbitbin(decimal_to_binary(num)) + "\n"
+            w.write(code)
 
-    # Type F instruction
+        elif query[0] == "rs":
+            code += opcode["rs"]
+            code += "0"
+            code += choose_register(query[1])
+            num = int(query[2][1:])
+            code += sevenbitbin(decimal_to_binary(num)) + "\n"
+            w.write(code)
 
-    elif query[0] == "hlt":
-        code += opcode["hlt"]
-        code += "0"*11 + "\n"
-        w.write(code)
-#Var declaration
-    elif query[0] == "var":
-        var_add[query[1]]=sevenbitbin(decimal_to_binary(var_count))
-        var_count+=1
+        elif query[0] == "ls":
+            code += opcode["ls"]
+            code += "0"
+            code += choose_register(query[1])
+            num = int(query[2][1:])
+            code += sevenbitbin(decimal_to_binary(num)) + "\n"
+            w.write(code)
+
+        # Type C instruction
+        elif ((len(query) == 3) & (query[0] == "mov" or query[0] == "div" or query[0] == "not" or query[0] == "cmp") & (
+                query[2] in registers)):
+            if(query[0]=="mov"):
+                code += opcode[query[0]][1] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
+                w.write(code)
+            else:
+                code += opcode[query[0]] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
+                w.write(code)
+        #type d instruction
+        elif (query[0]=="ld" or query[0]=="st"):
+            code+=opcode[query[0]]+"0"+ registers[query[1]]+var_add[query[2]]+"\n"
+            w.write(code)
+
+        # Type E instruction
+
+        elif query[0] == "jmp":
+            code += opcode["jmp"]
+            code += "0000"
+            code += Find_addr(query[1][:-1], List_of_words)
+            w.write(code)
+
+        elif query[0] == "jlt":
+            code += opcode["jlt"]
+            code += "0000"
+            code += Find_addr(query[1][:-1], List_of_words)
+            w.write(code)
+
+        elif query[0] == "jgt":
+            code += opcode["jgt"]
+            code += "0000"
+            code += Find_addr(query[1][:-1], List_of_words)
+            w.write(code)
+
+        elif query[0] == "je":
+            code += opcode["je"]
+            code += "0000"
+            code += Find_addr(query[1][:-1], List_of_words)
+            w.write(code)
+
+        # Type F instruction
+
+        elif query[0] == "hlt":
+            code += opcode["hlt"]
+            code += "0"*11 + "\n"
+            w.write(code)
