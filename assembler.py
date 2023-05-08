@@ -164,6 +164,11 @@ for i in range(nlines):
             code += opcode[query[0]] + "00000" + 
                 registers[query[1]] + registers[query[2]] + "\n"
             w.write(code)
+             #type d instruction
+    elif (query[0]=="ld" or query[0]=="st"):
+        code+=opcode[query[0]]+"0"+"\n"
+        register[query[1]]+var_add[query[2]]+"\n"
+        w.write(code)
 
     # Type E instruction
 
