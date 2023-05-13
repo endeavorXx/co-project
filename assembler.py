@@ -29,8 +29,9 @@ def sevenbitbin(abc):
     a = len(abc)
     return ("0" * (7 - a) + abc)
 
-var_add={}
-var_count=0
+
+var_add = {}
+var_count = 0
 opcode = {
     "add": "00000",
     "sub": "00001",
@@ -70,7 +71,9 @@ nlines = len(f.readlines())
 f.seek(0)
 
 sentence_list = f.read().split("\n")
-List_of_words = [line.split() for line in sentence_list if line.split()[0]!="var"]
+List_of_words = [line.split() for line in sentence_list if line.split()[0] != "var"]
+list2=[i[0] for i in List_of_words]
+print(list2)
 
 f.seek(0)
 
@@ -79,131 +82,217 @@ for i in range(nlines):
     code = ""
     # Type A instruction
     if query[0] == "var":
-        var_add[query[1]] = sevenbitbin(decimal_to_binary(var_count))
-        var_count += 1
-        
+        if len(query)==2:
+            var_add[query[1]] = sevenbitbin(decimal_to_binary(var_count))
+            var_count += 1
+        else:
+            w.write("Invalid Variable Declaration\n")
     elif query[0] == "add":
-        code += opcode["add"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
-
+        if len(query)==4:
+            code += opcode["add"]
+            code += "00"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
     elif query[0] == "sub":
-        code += opcode["sub"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
+        if len(query)==4:
+            code += opcode["sub"]
+            code += "00"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
 
     elif query[0] == "mul":
-        code += opcode["mul"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
+        if len(query)==4:
+            code += opcode["mul"]
+            code += "00"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
 
     elif query[0] == "xor":
-        code += opcode["xor"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
+        if len(query)==4:
+            code += opcode["xor"]
+            code += "00"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
 
     elif query[0] == "or":
-        code += opcode["or"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
+        if len(query)==4:
+            code += opcode["or"]
+            code += "00"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
 
     elif query[0] == "and":
-        code += opcode["and"]
-        code += "00"
-        code += choose_register(query[1])
-        code += choose_register(query[2])
-        code += choose_register(query[3]) + "\n"
-        w.write(code)
+        if len(query)==4:
+            code += opcode["and"]
+            code += "00"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            code += choose_register(query[1])
+            code += choose_register(query[2])
+            code += choose_register(query[3]) + "\n"
+            w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
 
     # Type B instruction
     elif (query[0] == "mov"):
-        if (query[2][0] == "$"):
-            code += opcode["mov"][0]
+        if len(query)==3:
+            if (query[2][0] == "$"):
+                code += opcode["mov"][0]
+                code += "0"
+                code += choose_register(query[1])
+                num = int(query[2][1:])
+                code += sevenbitbin(decimal_to_binary(num)) + "\n"
+                w.write(code)
+            elif (query[2] in registers):
+                code += opcode[query[0]][1] + "00000" + \
+                    registers[query[1]] + registers[query[2]] + "\n"
+                w.write(code)
+            else:
+                w.write("invalid syntax use\n")
+        else:
+            w.write("Invalid Instruction\n")
+
+    elif query[0] == "rs":
+        if len(query)==3:
+            code += opcode["rs"]
             code += "0"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS" ):
+                w.write("illegal Use Of registers\n")
+                continue
             code += choose_register(query[1])
             num = int(query[2][1:])
             code += sevenbitbin(decimal_to_binary(num)) + "\n"
+            w.write(code)
         else:
-            code +=opcode[query[0]][1] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
-        w.write(code)
-
-    elif query[0] == "rs":
-        code += opcode["rs"]
-        code += "0"
-        code += choose_register(query[1])
-        num = int(query[2][1:])
-        code += sevenbitbin(decimal_to_binary(num)) + "\n"
-        w.write(code)
+            w.write("Invalid Instruction\n")
 
     elif query[0] == "ls":
-        code += opcode["ls"]
-        code += "0"
-        code += choose_register(query[1])
-        num = int(query[2][1:])
-        code += sevenbitbin(decimal_to_binary(num)) + "\n"
-        w.write(code)
+        if len(query)==3:
+            code += opcode["ls"]
+            code += "0"
+            if (query[1] == "FLAGS" or query[2] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            code += choose_register(query[1])
+            num = int(query[2][1:])
+            code += sevenbitbin(decimal_to_binary(num)) + "\n"
+            w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
 
     # Type C instruction
-    elif ((len(query) == 3) & (query[0] == "div" or query[0] == "not" or query[0] == "cmp") ):
-        if(query[2] in registers):
-            code += opcode[query[0]] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
+    elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp"):
+        if len(query)==3:
+            if (query[1] == "FLAGS" or query[2] == "FLAGS"):
+                w.write("illegal Use Of registers\n")
+                continue
+            if (query[2] in registers):
+                code += opcode[query[0]] + "00000" + \
+                    registers[query[1]] + registers[query[2]] + "\n"
+                w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
+
+    # type d instruction
+    elif (query[0] == "ld" or query[0] == "st"):
+        if len(query)==3:
+            if (query[1] == "FLAGS" or (query[2] not in var_add)):
+                w.write("illegal Use Of registers or undeclared variables\n")
+                continue
+            code += opcode[query[0]]+"0" + \
+                registers[query[1]]+var_add[query[2]]+"\n"
             w.write(code)
-    #type d instruction
-    elif (query[0]=="ld" or query[0]=="st"):
-        code+=opcode[query[0]]+"0"+ registers[query[1]]+var_add[query[2]]+"\n"
-        w.write(code)
+        else:
+            w.write("Invalid Instruction\n")
 
     # Type E instruction
 
     elif query[0] == "jmp":
-        code += opcode["jmp"]
-        code += "0000"
-
-        code += Find_addr(query[1]+":", List_of_words) + "\n"
-        w.write(code)
+        if (len(query)==2) & (query[1]+":" in list2) :
+            code += opcode["jmp"]
+            code += "0000"
+            code += Find_addr(query[1]+":", List_of_words) + "\n"
+            w.write(code)
+        else:
+            w.write("Undeclared Label\n")
 
     elif query[0] == "jlt":
-        code += opcode["jlt"]
-        code += "0000"
-        code +=Find_addr(query[1]+":", List_of_words) + "\n"
-        w.write(code)
+        if (len(query)==2) & (query[1]+":" in list2) :
+            code += opcode["jlt"]
+            code += "0000"
+            code += Find_addr(query[1]+":", List_of_words) + "\n"
+            w.write(code)
+        else:
+            w.write("Undeclared Label\n")
 
     elif query[0] == "jgt":
-        code += opcode["jgt"]
-        code += "0000"
-        code +=Find_addr(query[1]+":", List_of_words) + "\n"
-        w.write(code)
+        if (len(query)==2) & (query[1]+":" in list2) :
+            code += opcode["jgt"]
+            code += "0000"
+            code += Find_addr(query[1]+":", List_of_words) + "\n"
+            w.write(code)
+        else:
+            w.write("Undeclared Label\n")
 
     elif query[0] == "je":
-        code += opcode["je"]
-        code += "0000"
-        code +=Find_addr(query[1]+":", List_of_words) + "\n"
-        w.write(code)
+        if (len(query)==2) & (query[1]+":" in list2) :
+            code += opcode["je"]
+            code += "0000"
+            code += Find_addr(query[1]+":", List_of_words) + "\n"
+            w.write(code)
+        else:
+            w.write("Undeclared Label\n")
+
 
     # Type F instruction
-    elif (len(query)==1):
+    elif (len(query) == 1):
         if query[0] == "hlt":
             code += opcode["hlt"]
             code += "0"*11 + "\n"
             w.write(code)
 
-    elif(len(query)==2):
-        if(query[1]=="hlt"):
+
+    elif (len(query) == 2):
+        if (query[1] == "hlt"):
             code += opcode["hlt"]
             code += "0"*11 + "\n"
             w.write(code)
+    else:
+        w.write("Invalid Syntax\n")
