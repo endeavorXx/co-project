@@ -90,156 +90,190 @@ for i in range(nlines):
             w.write("Invalid Variable Declaration\n")
     elif query[0] == "add":
         if len(query)==4:
-            code += opcode["add"]
-            code += "00"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            code += choose_register(query[2])
-            code += choose_register(query[3]) + "\n"
-            w.write(code)
+            if ((query[1] in registers) and (query[1] in registers) and (query[1] in registers)):
+                code += opcode["add"]
+                code += "00"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                code += choose_register(query[2])
+                code += choose_register(query[3]) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
     elif query[0] == "sub":
         if len(query)==4:
-            code += opcode["sub"]
-            code += "00"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            code += choose_register(query[2])
-            code += choose_register(query[3]) + "\n"
-            w.write(code)
+            if ((query[1] in registers) and (query[1] in registers) and (query[1] in registers)):
+                code += opcode["sub"]
+                code += "00"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                code += choose_register(query[2])
+                code += choose_register(query[3]) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     elif query[0] == "mul":
         if len(query)==4:
-            code += opcode["mul"]
-            code += "00"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            code += choose_register(query[2])
-            code += choose_register(query[3]) + "\n"
-            w.write(code)
+            if ((query[1] in registers) and (query[1] in registers) and (query[1] in registers)):
+                code += opcode["mul"]
+                code += "00"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                code += choose_register(query[2])
+                code += choose_register(query[3]) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     elif query[0] == "xor":
         if len(query)==4:
-            code += opcode["xor"]
-            code += "00"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            code += choose_register(query[2])
-            code += choose_register(query[3]) + "\n"
-            w.write(code)
+            if ((query[1] in registers) and (query[1] in registers) and (query[1] in registers)):
+                code += opcode["xor"]
+                code += "00"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                code += choose_register(query[2])
+                code += choose_register(query[3]) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     elif query[0] == "or":
         if len(query)==4:
-            code += opcode["or"]
-            code += "00"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            code += choose_register(query[2])
-            code += choose_register(query[3]) + "\n"
-            w.write(code)
+            if ((query[1] in registers) and (query[1] in registers) and (query[1] in registers)):
+                code += opcode["or"]
+                code += "00"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                code += choose_register(query[2])
+                code += choose_register(query[3]) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
+
         else:
             w.write("Invalid Instruction\n")
 
     elif query[0] == "and":
         if len(query)==4:
-            code += opcode["and"]
-            code += "00"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            code += choose_register(query[2])
-            code += choose_register(query[3]) + "\n"
-            w.write(code)
+            if ((query[1] in registers) and (query[1] in registers) and (query[1] in registers)):
+                code += opcode["and"]
+                code += "00"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS" or query[3] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                code += choose_register(query[2])
+                code += choose_register(query[3]) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     # Type B instruction
     elif (query[0] == "mov"):
         if len(query)==3:
-            if (query[2][0] == "$"):
-                code += opcode["mov"][0]
-                code += "0"
-                code += choose_register(query[1])
-                num = int(query[2][1:])
-                code += sevenbitbin(decimal_to_binary(num)) + "\n"
-                w.write(code)
-            elif (query[2] in registers):
-                code += opcode[query[0]][1] + "00000" + \
-                    registers[query[1]] + registers[query[2]] + "\n"
-                w.write(code)
+            if ((query[1] in registers)):
+                if (query[2][0] == "$"):
+                    code += opcode["mov"][0]
+                    code += "0"
+                    code += choose_register(query[1])
+                    num = int(query[2][1:])
+                    code += sevenbitbin(decimal_to_binary(num)) + "\n"
+                    w.write(code)
+                elif (query[2] in registers):
+                    code += opcode[query[0]][1] + "00000" + \
+                        registers[query[1]] + registers[query[2]] + "\n"
+                    w.write(code)
+                else:
+                    w.write("invalid syntax use\n")
             else:
-                w.write("invalid syntax use\n")
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     elif query[0] == "rs":
         if len(query)==3:
-            code += opcode["rs"]
-            code += "0"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS" ):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            num = int(query[2][1:])
-            code += sevenbitbin(decimal_to_binary(num)) + "\n"
-            w.write(code)
+            if ((query[1] in registers)):
+                code += opcode["rs"]
+                code += "0"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS" ):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                num = int(query[2][1:])
+                code += sevenbitbin(decimal_to_binary(num)) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     elif query[0] == "ls":
         if len(query)==3:
-            code += opcode["ls"]
-            code += "0"
-            if (query[1] == "FLAGS" or query[2] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            code += choose_register(query[1])
-            num = int(query[2][1:])
-            code += sevenbitbin(decimal_to_binary(num)) + "\n"
-            w.write(code)
+            if ((query[1] in registers)):
+                code += opcode["ls"]
+                code += "0"
+                if (query[1] == "FLAGS" or query[2] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                code += choose_register(query[1])
+                num = int(query[2][1:])
+                code += sevenbitbin(decimal_to_binary(num)) + "\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     # Type C instruction
     elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp"):
         if len(query)==3:
-            if (query[1] == "FLAGS" or query[2] == "FLAGS"):
-                w.write("illegal Use Of registers\n")
-                continue
-            if (query[2] in registers):
-                code += opcode[query[0]] + "00000" + \
-                    registers[query[1]] + registers[query[2]] + "\n"
-                w.write(code)
+            if ((query[1] in registers) and (query[2] in registers)):
+                if (query[1] == "FLAGS" or query[2] == "FLAGS"):
+                    w.write("illegal Use Of registers\n")
+                    continue
+                if (query[2] in registers):
+                    code += opcode[query[0]] + "00000" + \
+                        registers[query[1]] + registers[query[2]] + "\n"
+                    w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
     # type d instruction
     elif (query[0] == "ld" or query[0] == "st"):
         if len(query)==3:
-            if (query[1] == "FLAGS" or (query[2] not in var_add)):
-                w.write("illegal Use Of registers or undeclared variables\n")
-                continue
-            code += opcode[query[0]]+"0" + \
-                registers[query[1]]+var_add[query[2]]+"\n"
-            w.write(code)
+            if ((query[1] in registers)):
+                if (query[1] == "FLAGS" or (query[2] not in var_add)):
+                    w.write("illegal Use Of registers or undeclared variables\n")
+                    continue
+                code += opcode[query[0]]+"0" + \
+                    registers[query[1]]+var_add[query[2]]+"\n"
+                w.write(code)
+            else:
+                w.write("illegal use of registers\n")
         else:
             w.write("Invalid Instruction\n")
 
