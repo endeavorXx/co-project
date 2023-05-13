@@ -138,7 +138,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "sub":
         code += opcode["sub"]
@@ -156,7 +156,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "mul":
         code += opcode["mul"]
@@ -174,7 +174,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "xor":
         code += opcode["xor"]
@@ -192,7 +192,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "or":
         code += opcode["or"]
@@ -210,7 +210,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "and":
         code += opcode["and"]
@@ -228,7 +228,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     # Type B instruction
     elif (query[0] == "mov"):
@@ -257,7 +257,7 @@ for i in range(nlines):
                     code +=opcode[query[0]][1] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "rs":
         code += opcode["rs"]
@@ -282,7 +282,7 @@ for i in range(nlines):
             w.write(code)
 
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "ls":
         code += opcode["ls"]
@@ -306,7 +306,7 @@ for i in range(nlines):
                 exit()
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     # Type C instruction
 
@@ -319,7 +319,7 @@ for i in range(nlines):
                 w.write(f"wrong register name at line number {i}\n")
                 print("wrong register name")
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     # Type D instruction
 
@@ -336,7 +336,7 @@ for i in range(nlines):
             code+=opcode[query[0]]+"0"+ registers[query[1]]+var_add[query[2]]+"\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     # Type E instruction
 
@@ -347,7 +347,7 @@ for i in range(nlines):
             code += Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "jlt":
         code += opcode["jlt"]
@@ -356,7 +356,7 @@ for i in range(nlines):
             code +=Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "jgt":
         code += opcode["jgt"]
@@ -365,7 +365,7 @@ for i in range(nlines):
             code +=Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif query[0] == "je":
         code += opcode["je"]
@@ -374,7 +374,7 @@ for i in range(nlines):
             code +=Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     # Type F instruction
     elif (len(query)==1):
@@ -385,7 +385,7 @@ for i in range(nlines):
                 code += "0"*11 + "\n"
                 w.write(code)
         except:
-            w.write("General Synatx Error\n")
+            w.write(f"General Synatx Error at line number {i}\n")
 
     elif(len(query)==2):
         try:
@@ -396,8 +396,8 @@ for i in range(nlines):
                 code += "0"*11 + "\n"
                 w.write(code)
         except:
-            w.write("General Synatx Error\n")
-            
+            w.write(f"General Synatx Error at line number {i}\n")
+
     else:
         w.write(f"Error at line number {i}..\..wrong instruction name\n")
         print(f"Error at line number {i}..\..wrong instruction name ")
