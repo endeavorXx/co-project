@@ -73,6 +73,7 @@ f.seek(0)
 sentence_list = f.read().split("\n")
 List_of_words = [line.split() for line in sentence_list if line.split()[0] != "var"]
 list2=[i[0] for i in List_of_words]
+var_count=len(list2)
 print(list2)
 
 f.seek(0)
