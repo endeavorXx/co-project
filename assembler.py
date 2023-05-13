@@ -92,6 +92,8 @@ lasthalt = 0
 
 flagreg = "0"*12 + "0000"  #last 4 bits are indicator of V L G E
 
+w.write("# Assumption: Assembly code starts with line number 0")
+
 if nlines>128:
     w.write("More no of instructions than expected")        # assembler can handle only 128 lines of instruction
     print("More no of instructions than expected")
@@ -409,3 +411,4 @@ if ishalt==0:
 if lasthalt==0:
     print("Last instruction not hlt type")
     w.write("Last instruction not hlt type")
+f.close()
