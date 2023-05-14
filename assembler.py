@@ -100,15 +100,17 @@ w.write("# Assumption: Assembly code starts with line number 0\n")
 if nlines>128:
     w.write("More no of instructions than expected")        # assembler can handle only 128 lines of instruction
     print("More no of instructions than expected")
-
+    
+void_lines = 0
 for i in range(nlines):
     query = f.readline().strip().split(" ")
 
     if query[0].endswith(":"):                   # statement - label1: mov R1 R2 should be executed
-        labels[query[0]] =  sevenbitbin(decimal_to_binary(i-var_count))
+        labels[query[0]] =  sevenbitbin(decimal_to_binary(i-var_count-void_lines))
         query.remove(query[0])
         
     if query == ['']:
+        void_lines+=1
         continue
     
     if i==nlines-1:
