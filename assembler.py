@@ -1,6 +1,5 @@
 # Note - writing assembly
 #        <label-name>:              <always use a semi-colon just after labelname>
-#  add next instructions in next line afterwards
 
 def decimal_to_binary(num):
     "This function takes integer number and returns a string of binary no converts from decimal"
@@ -37,6 +36,8 @@ def sevenbitbin(abc):
 
 var_add={}
 var_count=0
+
+labels = {}
 
 opcode = {
     "add": "00000",
@@ -100,6 +101,11 @@ if nlines>128:
 
 for i in range(nlines):
     query = f.readline().strip().split(" ")
+
+    if query[0].endswith(":"):                   # statement - label1: mov R1 R2 should be executed
+        labels[query[0]] =  sevenbitbin(decimal_to_binary(i-var_count))
+        query.remove(query[0])
+        
     if query == ['']:
         continue
     
