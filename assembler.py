@@ -80,9 +80,11 @@ f.seek(0)
 sentence_list = f.read().strip().split("\n")
 
 # It removes blank lines in between the program
-for line in sentence_list:
-    if line == "":
-        sentence_list.remove(line)
+length = len(sentence_list)
+cpy = sentence_list.copy()
+for i in range(length):
+    if cpy[i] == "":
+        sentence_list.remove(cpy[i])
 
 List_of_words = [line.split() for line in sentence_list if line.split()[0]!="var"]
 
