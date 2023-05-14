@@ -418,3 +418,4 @@ if lasthalt==0:
     print("Last instruction not hlt type")
     w.write("Last instruction not hlt type")
 f.close()
+w.close()
