@@ -1,4 +1,4 @@
-# Note - writing assembly
+ #Note - writing assembly
 #        <label-name>:              <always use a semi-colon just after labelname>
 
 def decimal_to_binary(num):
@@ -79,7 +79,7 @@ registers = {
 }
 
 f = open("input.txt")
-w = open("output.txt", "w")
+w = open("output.txt", "w+")
 nlines = len(f.readlines())
 f.seek(0)
 
@@ -103,11 +103,13 @@ f.seek(0)
 
 ishalt = 0
 lasthalt = 0
+error_code = 0
 
 flagreg = "0"*12 + "0000"  # last 4 bits are indicator of V L G E
 
 if nlines > 128:
     # assembler can handle only 128 lines of instruction
+    error_code = 1
     w.write("More no of instructions than expected")
     print("More no of instructions than expected")
 
@@ -141,6 +143,7 @@ for i in range(nlines):
     if query[0] == "var":
 
         if (i > var_count):
+            error_code = 1
             w.write(
                 f"at line number {i+1} variable must be declared at the beginning\n")
             print("variable must be declared at the beginning")
@@ -153,10 +156,12 @@ for i in range(nlines):
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
+                error_code = 1
                 w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3] == "FLAGS"):
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -165,18 +170,20 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "sub":
-        print("yes")
         code += opcode["sub"]
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
+                error_code = 1
                 w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3] == "FLAGS"):
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -185,6 +192,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "mul":
@@ -192,10 +200,12 @@ for i in range(nlines):
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
+                error_code = 1
                 w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3] == "FLAGS"):
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -204,6 +214,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "xor":
@@ -211,10 +222,12 @@ for i in range(nlines):
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
+                error_code = 1
                 w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3] == "FLAGS"):
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -223,6 +236,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "or":
@@ -230,10 +244,12 @@ for i in range(nlines):
         code += "00"
         try:
             if (query[1] or query[2] or query[3]) not in (registers):
+                error_code = 1
                 w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3] == "FLAGS"):
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -242,6 +258,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "and":
@@ -249,10 +266,12 @@ for i in range(nlines):
         code += "00"
         try:
             if (query[1] or query[2] or query[3]) not in (registers):
+                error_code = 1
                 w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3] == "FLAGS"):
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -261,6 +280,7 @@ for i in range(nlines):
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     # Type B instruction
@@ -271,6 +291,7 @@ for i in range(nlines):
                 code += "0"
 
                 if (query[1] not in registers):
+                    error_code = 1
                     w.write(
                         f"wrong register name declared at line number {i+1}\n")
                     print("wrong register name")
@@ -281,10 +302,12 @@ for i in range(nlines):
                 if (num >= 0 and num <= 127):
                     code += sevenbitbin(decimal_to_binary(num)) + "\n"
                 else:
+                    error_code = 1
                     w.write("value error!! Imm have range: [0,127]\n")
                     print("value error!! Imm have range: [0,127]")
             else:
                 if (query[1] or query[2]) not in registers:
+                    error_code = 1
                     w.write(
                         f"wrong register name declared at line number {i+1}\n")
                     print("wrong register name")
@@ -293,6 +316,7 @@ for i in range(nlines):
                         registers[query[1]] + registers[query[2]] + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "rs":
@@ -300,10 +324,12 @@ for i in range(nlines):
         code += "0"
         try:
             if query[1] not in registers:
+                error_code = 1
                 w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if query[1] == "FLAGS":
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -314,11 +340,13 @@ for i in range(nlines):
                 code += sevenbitbin(decimal_to_binary(num)) + "\n"
 
             else:
+                error_code = 1
                 w.write("value error!! Imm have range: [0,127]\n")
                 print("value error!! Imm have range: [0,127]")
             w.write(code)
 
         except:
+            error_code = 1
             w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "ls":
@@ -326,10 +354,12 @@ for i in range(nlines):
         code += "0"
         try:
             if query[1] not in registers:
+                error_code = 1
                 w.write(f"wrong register name at line number {i+1}\n")
                 print("wrong register name")
 
             if query[1] == "FLAGS":
+                error_code = 1
                 w.write(
                     f"Error at line number {i+1} Illegal use of Flag register\n")
 
@@ -339,12 +369,14 @@ for i in range(nlines):
             if (num >= 0 and num <= 127):
                 code += sevenbitbin(decimal_to_binary(num)) + "\n"
             else:
+                error_code = 1
                 w.write(
                     f"value error!! Imm have range: [0,127] at line number {i}\n")
                 print("value error!! Imm have range: [0,127]")
                 exit()
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Syntax Error at line number {i+1}\n")
 
     # Type C instruction
@@ -352,6 +384,7 @@ for i in range(nlines):
     elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp"):
         try:
             if (len(query)!=3):
+                error_code = 1
                 w.write(f"Error at line number {i+1} can't compare more than 2 registers\n")
                 continue
             if (len(query) == 3):
@@ -360,9 +393,11 @@ for i in range(nlines):
                         registers[query[1]] + registers[query[2]] + "\n"
                     w.write(code)
                 else:
+                    error_code = 1
                     w.write(f"wrong register name at line number {i+1}\n")
                     print("wrong register name")
         except:
+            error_code = 1
             w.write(f"General Syntax Error at line number {i+1}\n")
 
     # Type D instruction
@@ -370,10 +405,12 @@ for i in range(nlines):
     elif (query[0] == "ld") or (query[0] == "st"):
         try:
             if query[1] not in registers:
+                error_code = 1
                 w.write(f"wrong register name at line number {i+1}\n")
                 print("wrong register name")
 
             if query[2] not in var_add:
+                error_code = 1
                 w.write(
                     f"at line number {i+1}, undeclared variable type :{query[2]}\n")
                 print(f"undeclared variable type :{query[2]}")
@@ -383,6 +420,7 @@ for i in range(nlines):
                 registers[query[1]]+var_add[query[2]]+"\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Syntax Error at line number {i+1}\n")
 
     # Type E instruction
@@ -394,6 +432,7 @@ for i in range(nlines):
             code += Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "jlt":
@@ -403,6 +442,7 @@ for i in range(nlines):
             code += Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "jgt":
@@ -412,6 +452,7 @@ for i in range(nlines):
             code += Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "je":
@@ -421,6 +462,7 @@ for i in range(nlines):
             code += Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
+            error_code = 1
             w.write(f"General Synatx Error at line number {i+1}\n")
 
     # Type F instruction
@@ -439,20 +481,37 @@ for i in range(nlines):
                 code += "0"*11 + "\n"
                 w.write(code)
         except:
+            error_code = 1
             w.write(f"General Syntax error at line number {i+1}")
             print(f"general syntax error at line number {i+1}")
 
     else:
+        error_code = 1
         w.write(f"Error at line number {i+1} wrong instruction name\n")
         print(f"Error at line number {i+1} wrong instruction name ")
 
 
 if ishalt == 0:
+    error_code = 1
     print("Missing hlt instruction")
     w.write("Missing hlt instruction\n")
 if lasthalt == 0:
+    error_code = 1
     print("Last instruction not hlt type")
     w.write("Last instruction not hlt type")
-print(labels)
-f.close()
+
 w.close()
+f.close()
+if error_code==1:
+    fl = open("output.txt","a+")
+    fl.seek(0)
+    mylines = fl.read().split("\n")
+    mylines.pop()
+    fl.close()
+    fl = open("output.txt","w")
+    for line in mylines:
+        if line[0]=="0" or line[0]=="1":
+            continue
+        else:
+            fl.write(f"{line}\n")
+    fl.close()
