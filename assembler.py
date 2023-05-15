@@ -351,6 +351,9 @@ for i in range(nlines):
 
     elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp"):
         try:
+            if (len(query)!=3):
+                w.write(f"Error at line number {i+1} can't compare more than 2 registers")
+                continue
             if (len(query) == 3):
                 if (query[1] and query[2]) in (registers):
                     code += opcode[query[0]] + "00000" + \
