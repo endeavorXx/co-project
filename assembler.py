@@ -16,7 +16,7 @@ def Find_addr(label, list1, line_num):
     ss = ""
     islabel = 0                     # label should not be a variable 
     if (label in var_add):
-        w.write(f"Error at line number : {line_num}..\.. Misuse of labels as variables\n")
+        w.write(f"Error at line number : {line_num+1}..\.. Misuse of labels as variables\n")
         print("Misuse of labels as variables")
 
     for i in range(len(list1)):
@@ -24,10 +24,12 @@ def Find_addr(label, list1, line_num):
             islabel = 1
             b = decimal_to_binary(i)
             ss += sevenbitbin(b)
-            return ss
         
     if islabel == 0:
-        print(f"Error at line number : {line_num}..\.. undeclared label type : {label}")
+        w.write(f"Error at line number : {line_num+1}..\.. undeclared label type : {label}\n")
+        print(f"Error at line number : {line_num+1}..\.. undeclared label type : {label}")
+    else:
+        return ss
 
 
 def sevenbitbin(abc):
@@ -100,10 +102,10 @@ w.write("# Assumption: Assembly code starts with line number 0\n")
 if nlines>128:
     w.write("More no of instructions than expected")        # assembler can handle only 128 lines of instruction
     print("More no of instructions than expected")
-    
+
 void_lines = 0
 for i in range(nlines):
-    query = f.readline().strip().split(" ")
+    query = f.readline().strip().split()
 
     if query[0].endswith(":"):                   # statement - label1: mov R1 R2 should be executed
         labels[query[0]] =  sevenbitbin(decimal_to_binary(i-var_count-void_lines))
@@ -129,7 +131,7 @@ for i in range(nlines):
     if query[0] == "var":
 
         if (i>var_count):
-            w.write(f"at line number {i} variable must be declared at the beginning\n")
+            w.write(f"at line number {i+1} variable must be declared at the beginning\n")
             print("variable must be declared at the beginning")
         var_add[query[1]] = sevenbitbin(decimal_to_binary(var_count))
         var_count += 1  
@@ -139,108 +141,109 @@ for i in range(nlines):
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
-                w.write(f"wrong register name declared at line number {i}\n")
+                w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3]=="FLAGS"):
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
             
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "sub":
+        print("yes")
         code += opcode["sub"]
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
-                w.write(f"wrong register name declared at line number {i}\n")
+                w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if (query[3]=="FLAGS"):
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
             
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "mul":
         code += opcode["mul"]
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
-                w.write(f"wrong register name declared at line number {i}\n")
+                w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
             
             if (query[3]=="FLAGS"):
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
             
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "xor":
         code += opcode["xor"]
         code += "00"
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
-                w.write(f"wrong register name declared at line number {i}\n")
+                w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
             
             if (query[3]=="FLAGS"):
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
             
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "or":
         code += opcode["or"]
         code += "00"
         try:
             if (query[1] or query[2] or query[3]) not in (registers):
-                w.write(f"wrong register name declared at line number {i}\n")
+                w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
             
             if (query[3]=="FLAGS"):
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
             
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "and":
         code += opcode["and"]
         code += "00"
         try:
             if (query[1] or query[2] or query[3]) not in (registers):
-                w.write(f"wrong register name declared at line number {i}\n")
+                w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
             
             if (query[3]=="FLAGS"):
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
             
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]] + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     # Type B instruction
     elif (query[0] == "mov"):
@@ -250,7 +253,7 @@ for i in range(nlines):
                 code += "0"
                 
                 if (query[1] not in registers):
-                    w.write(f"wrong register name declared at line number {i}\n")
+                    w.write(f"wrong register name declared at line number {i+1}\n")
                     print("wrong register name")
                 
                 code += registers[query[1]]
@@ -263,24 +266,24 @@ for i in range(nlines):
                     print("value error!! Imm have range: [0,127]")        
             else:
                 if (query[1] or query[2]) not in registers:
-                    w.write(f"wrong register name declared at line number {i}\n")
+                    w.write(f"wrong register name declared at line number {i+1}\n")
                     print("wrong register name")
                 else:
                     code +=opcode[query[0]][1] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "rs":
         code += opcode["rs"]
         code += "0"
         try:
             if query[1] not in registers:
-                w.write(f"wrong register name declared at line number {i}\n")
+                w.write(f"wrong register name declared at line number {i+1}\n")
                 print("wrong register name")
 
             if query[1] == "FLAGS":
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
 
             code += registers[query[1]]
             num = int(query[2][1:])
@@ -294,18 +297,18 @@ for i in range(nlines):
             w.write(code)
 
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax Error at line number {i+1}\n")
 
     elif query[0] == "ls":
         code += opcode["ls"]
         code += "0"
         try:
             if query[1] not in registers:
-                w.write(f"wrong register name at line number {i}\n")
+                w.write(f"wrong register name at line number {i+1}\n")
                 print("wrong register name")
             
             if query[1] == "FLAGS":
-                w.write(f"Error at line number {i} Illegal use of Flag register\n")
+                w.write(f"Error at line number {i+1} Illegal use of Flag register\n")
             
             code += registers[query[1]]
             num = int(query[2][1:])
@@ -318,37 +321,39 @@ for i in range(nlines):
                 exit()
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax Error at line number {i+1}\n")
 
     # Type C instruction
 
-    elif ((len(query) == 3) & (query[0] == "div" or query[0] == "not" or query[0] == "cmp") ):
+    elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp") :
         try:
-            if(query[1] and query[2]) in (registers):
-                code += opcode[query[0]] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
-                w.write(code)
-            else:
-                w.write(f"wrong register name at line number {i}\n")
-                print("wrong register name")
+            if (len(query)==3):
+                if(query[1] and query[2]) in (registers):
+                    code += opcode[query[0]] + "00000" + registers[query[1]] + registers[query[2]] + "\n"
+                    w.write(code)
+                else:
+                    w.write(f"wrong register name at line number {i+1}\n")
+                    print("wrong register name")
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax Error at line number {i+1}\n")
 
     # Type D instruction
 
     elif (query[0]=="ld") or (query[0]=="st"):
         try:
             if query[1] not in registers:
-                w.write(f"wrong register name at line number {i}\n")
+                w.write(f"wrong register name at line number {i+1}\n")
                 print("wrong register name")
             
             if query[2] not in var_add:
-                w.write(f"at line number {i}, undeclared variable type :{query[2]}\n")
+                w.write(f"at line number {i+1}, undeclared variable type :{query[2]}\n")
                 print(f"undeclared variable type :{query[2]}")
+                continue
             
             code+=opcode[query[0]]+"0"+ registers[query[1]]+var_add[query[2]]+"\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax Error at line number {i+1}\n")
 
     # Type E instruction
 
@@ -359,7 +364,7 @@ for i in range(nlines):
             code += Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "jlt":
         code += opcode["jlt"]
@@ -368,7 +373,7 @@ for i in range(nlines):
             code +=Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "jgt":
         code += opcode["jgt"]
@@ -377,7 +382,7 @@ for i in range(nlines):
             code +=Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     elif query[0] == "je":
         code += opcode["je"]
@@ -386,33 +391,29 @@ for i in range(nlines):
             code +=Find_addr(query[1]+":", List_of_words, i) + "\n"
             w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Synatx Error at line number {i+1}\n")
 
     # Type F instruction
-    elif (len(query)==1):
+
+    elif (query[0]== "hlt" or (len(query)==2 and query[1]=="hlt")):
+        ishalt = 1
         try:
-            if query[0] == "hlt":
-                ishalt = 1
+            if query[0]=="hlt":
+                code += opcode["hlt"]
+                code += "0"*11 + "\n"
+                w.write(code)
+            elif query[1]=="hlt":
+                Find_addr(query[0],List_of_words,i)         # checks whether a correct label is used or not by checking address 
                 code += opcode["hlt"]
                 code += "0"*11 + "\n"
                 w.write(code)
         except:
-            w.write(f"General Synatx Error at line number {i}\n")
+            w.write(f"General Syntax error at line number {i+1}")
+            print(f"general syntax error at line number {i+1}")
 
-    elif(len(query)==2):
-        try:
-            Find_addr(query[0],List_of_words,i)         # checks whether a correct label is used or not by checking address 
-            if(query[1]=="hlt"):
-                ishalt = 1
-                code += opcode["hlt"]
-                code += "0"*11 + "\n"
-                w.write(code)
-        except:
-            w.write(f"General Synatx Error at line number {i}\n")
-
-    else:
-        w.write(f"Error at line number {i}..\..wrong instruction name\n")
-        print(f"Error at line number {i}..\..wrong instruction name ")
+    else :
+        w.write(f"Error at line number {i+1} wrong instruction name\n")
+        print(f"Error at line number {i+1} wrong instruction name ")
 
 
 if ishalt==0:
@@ -421,5 +422,6 @@ if ishalt==0:
 if lasthalt==0:
     print("Last instruction not hlt type")
     w.write("Last instruction not hlt type")
+print(labels)
 f.close()
 w.close()
