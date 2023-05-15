@@ -498,7 +498,7 @@ if ishalt == 0:
 if lasthalt == 0:
     error_code = 1
     print("Last instruction not hlt type")
-    w.write("Last instruction not hlt type")
+    w.write("Last instruction not hlt type\n")
 
 w.close()
 f.close()
