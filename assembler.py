@@ -18,10 +18,8 @@ def Find_addr(label, list1, line_num):
     ss = ""
     islabel = 0                     # label should not be a variable
     if (label in var_add):
-        print(
-            f"Error at line number : {line_num+1}..\.. Misuse of labels as variables")
-        print("Misuse of labels as variables")
-
+        print(f"Error at line number : {line_num+1}..\.. Misuse of labels as variables")
+            
     for i in range(len(list1)):
         if label == list1[i][0]:
             islabel = 1
@@ -29,8 +27,7 @@ def Find_addr(label, list1, line_num):
             ss += sevenbitbin(b)
 
     if islabel == 0:
-        print(
-            f"Error at line number : {line_num+1}..\.. undeclared label type : {label}")
+        print(f"Error at line number : {line_num+1}..\.. undeclared label type : {label}")       
     else:
         return ss
 
@@ -141,7 +138,7 @@ for i in range(nlines):
 
         if (i > var_count):
             error_code = 1
-            print("variable must be declared at the beginning")
+            print(f"Error at line number {i+1} variable must be declared at the beginning")
         var_add[query[1]] = sevenbitbin(decimal_to_binary(var_num))
         var_num += 1
         var_count += 1
@@ -152,13 +149,12 @@ for i in range(nlines):
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
                 error_code = 1
-                print("wrong register name")
+                print(f"Error at line number {i+1} wrong register name")
 
             if (query[3] == "FLAGS"):
                 error_code = 1
-                print(
-                    f"Error at line number {i+1} Illegal use of Flag register")
-
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+                    
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]]
@@ -173,20 +169,19 @@ for i in range(nlines):
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
                 error_code = 1
-                print("wrong register name")
+                print(f"Error at line number {i+1} wrong register name")
 
             if (query[3] == "FLAGS"):
                 error_code = 1
-                print(
-                    f"Error at line number {i+1} Illegal use of Flag register")
-
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+                    
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]]
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "mul":
         code += opcode["mul"]
@@ -194,20 +189,19 @@ for i in range(nlines):
         try:
             if ((query[1] or query[2] or query[3]) not in (registers)):
                 error_code = 1
-                print("wrong register name")
+                print(f"Error at line nummber {i+1} wrong register name")
 
             if (query[3] == "FLAGS"):
                 error_code = 1
-                print(
-                    f"Error at line number {i+1} Illegal use of Flag register")
-
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+                  
             code += registers[query[1]]
             code += registers[query[2]]
             code += registers[query[3]]
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "xor":
         code += opcode["xor"]
@@ -228,7 +222,7 @@ for i in range(nlines):
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "or":
         code += opcode["or"]
@@ -236,7 +230,7 @@ for i in range(nlines):
         try:
             if (query[1] or query[2] or query[3]) not in (registers):
                 error_code = 1
-                print("wrong register name")
+                print(f"Error at line number {i+1} wrong register name")
 
             if (query[3] == "FLAGS"):
                 error_code = 1
@@ -269,7 +263,7 @@ for i in range(nlines):
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     # Type B instruction
     elif (query[0] == "mov"):
@@ -280,10 +274,8 @@ for i in range(nlines):
 
                 if (query[1] not in registers):
                     error_code = 1
-                    print(
-                        f"wrong register name declared at line number {i+1}")
-                    print("wrong register name")
-
+                    print(f"wrong register name declared at line number {i+1}")
+                    
                 code += registers[query[1]]
                 num = int(query[2][1:])
 
@@ -291,13 +283,11 @@ for i in range(nlines):
                     code += sevenbitbin(decimal_to_binary(num))
                 else:
                     error_code = 1
-                    print("value error!! Imm have range: [0,127]")
-                    print("value error!! Imm have range: [0,127]")
+                    print(f"Error at line number {i+1} value error!! Imm have range: [0,127]")
             else:
                 if (query[1] or query[2]) not in registers:
                     error_code = 1
-                    print(
-                        f"wrong register name declared at line number {i+1}")
+                    print(f"wrong register name declared at line number {i+1}")                       
                 else:
                     code += opcode[query[0]][1] + "00000" + \
                         registers[query[1]] + registers[query[2]]
@@ -316,9 +306,7 @@ for i in range(nlines):
 
             if query[1] == "FLAGS":
                 error_code = 1
-                print(
-                    f"Error at line number {i+1} Illegal use of Flag register")
-
+                print(f"Error at line number {i+1} Illegal use of Flag register")                    
             code += registers[query[1]]
             num = int(query[2][1:])
 
@@ -327,7 +315,7 @@ for i in range(nlines):
 
             else:
                 error_code = 1
-                print("value error!! Imm have range: [0,127]")
+                print("Error at line number {i+1} value error!! Imm have range: [0,127]")
 
             print(code)
 
@@ -345,9 +333,8 @@ for i in range(nlines):
 
             if query[1] == "FLAGS":
                 error_code = 1
-                print(
-                    f"Error at line number {i+1} Illegal use of Flag register")
-
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+                    
             code += registers[query[1]]
             num = int(query[2][1:])
 
@@ -355,9 +342,7 @@ for i in range(nlines):
                 code += sevenbitbin(decimal_to_binary(num))
             else:
                 error_code = 1
-                print(
-                    f"value error!! Imm have range: [0,127] at line number {i}")
-                exit()
+                print(f"value error!! Imm have range: [0,127] at line number {i}")                    
             print(code)
         except:
             error_code = 1
@@ -379,7 +364,7 @@ for i in range(nlines):
                     print(code)
                 else:
                     error_code = 1
-                    print("wrong register name")
+                    print(f"Error at line number {i+1} wrong register name")
         except:
             error_code = 1
             print(f"General Syntax Error at line number {i+1}")
@@ -414,7 +399,7 @@ for i in range(nlines):
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "jlt":
         code += opcode["jlt"]
@@ -424,7 +409,7 @@ for i in range(nlines):
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "jgt":
         code += opcode["jgt"]
@@ -434,7 +419,7 @@ for i in range(nlines):
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "je":
         code += opcode["je"]
@@ -444,7 +429,7 @@ for i in range(nlines):
             print(code)
         except:
             error_code = 1
-            print(f"General Synatx Error at line number {i+1}")
+            print(f"General Syntax Error at line number {i+1}")
 
     # Type F instruction
 
