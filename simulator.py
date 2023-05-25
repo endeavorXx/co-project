@@ -23,6 +23,7 @@ def sixteen_bit_binary(text):
     text = "0"*9 + text
     return text
 
+var_add={}
 
 opcode = {
     "add": "00000",
@@ -81,79 +82,78 @@ while True:
     query = mem[binary_to_decimal(pc)].strip()
 
     opcode = query[0:5]
-    
-    # Type A
-    if opcode =="00000":
 
-        temp_2= binary_to_decimal(reg_file[registers[query[10:13]]])
-        temp_3= binary_to_decimal(reg_file[registers[query[13:16]]])
-        reg_file[registers[query[7:10]]] = sixteen_bit_binary(decimal_to_7binary(temp_2+temp_3))
-        
-        
-        
+    # Type A
+    if opcode == "00000":
+
+        temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
+        temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
+        reg_file[registers[query[7:10]]] = sixteen_bit_binary(
+            decimal_to_7binary(temp_2+temp_3))
+
     if opcode == "00001":
         temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
         temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(
             decimal_to_7binary(temp_2-temp_3))
-        
+
     if opcode == "00110":
         temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
         temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(
             decimal_to_7binary(temp_2*temp_3))
-        
-        
 
     if opcode == "01010":
         temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
         temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(
-            decimal_to_7binary(temp_2^temp_3))
+            decimal_to_7binary(temp_2 ^ temp_3))
     if opcode == "01011":
 
         temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
         temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(
-            decimal_to_7binary(temp_2|temp_3))
+            decimal_to_7binary(temp_2 | temp_3))
     if opcode == "01100":
 
         temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
         temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(
-            decimal_to_7binary(temp_2&temp_3))
+            decimal_to_7binary(temp_2 & temp_3))
 
     # Type B
     if opcode == "00010":
         reg_code = query[6:9]
         reg_type = registers[reg_code]
         reg_file[reg_type] = sixteen_bit_binary(query[9:])
-    
-    if opcode=="01000":
+
+    if opcode == "01000":
         print(reg_file[registers[query[6:9]]])
         for i in range(binary_to_decimal(query[9:16])):
-            reg_file[registers[query[6:9]]] = "0"+reg_file[registers[query[6:9]]][0:-1]
-    
+            reg_file[registers[query[6:9]]] = "0" + \
+                reg_file[registers[query[6:9]]][0:-1]
+
     if opcode == "01001":
         print(reg_file[registers[query[6:9]]])
         for i in range(binary_to_decimal(query[9:16])):
-            reg_file[registers[query[6:9]]] =reg_file[registers[query[6:9]]][1:]+"0"
+            reg_file[registers[query[6:9]]
+                     ] = reg_file[registers[query[6:9]]][1:]+"0"
         print(reg_file[registers[query[6:9]]])
-        
-        #Type C
+
+        # Type C
     if opcode == "00011":
-        reg1=query[10:13]
-        reg2=query[13:16]
-        reg_file[registers[reg1]]=reg_file[registers[reg2]]
-        
+        reg1 = query[10:13]
+        reg2 = query[13:16]
+        reg_file[registers[reg1]] = reg_file[registers[reg2]]
+
     if opcode == "00111":
         temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
         temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
         reg_file["R0"] = sixteen_bit_binary(
             decimal_to_7binary(temp_2//temp_3))
         reg_file["R1"] = sixteen_bit_binary(
-            decimal_to_7binary(temp_2%temp_3))
-        
+            decimal_to_7binary(temp_2 % temp_3))
+
     if opcode == "01101":
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(
             decimal_to_7binary(~binary_to_decimal(reg_file[registers[query[10:13]]])))
@@ -163,18 +163,40 @@ while True:
         if temp_2 == temp_3:
             reg_file["FLAGS"] = reg_file["FLAGS"][:15]+"1"
         elif temp_2 > temp_3:
-            reg_file["FLAGS"] = reg_file["FLAGS"][:14]+"1"+reg_file["FLAGS"][15]
+            reg_file["FLAGS"] = reg_file["FLAGS"][:14] + \
+                "1"+reg_file["FLAGS"][15]
         else:
-            reg_file["FLAGS"] = reg_file["FLAGS"][:13] +"1"+reg_file["FLAGS"][14:]
-        
-
-
-
+            reg_file["FLAGS"] = reg_file["FLAGS"][:13] + \
+                "1"+reg_file["FLAGS"][14:]
+    
+    #Type D
+    if opcode=="00100":
+        if query[9:16] in var_add:
+            reg_file[registers[query[6:9]]]=sixteen_bit_binary(decimal_to_7binary(var_add[query[9:16]]))
+        else:
+            var_add[query[9:16]]=0
             
+    if opcode=="00101":
+        var_add[query[9:16]]=binary_to_decimal(reg_file[registers[query[6:9]]])
+    
+
+    #Type E
+    if opcode == "01111":
+        pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
+
+    if opcode=="11100":
+        if reg_file["FLAGS"][13]=="1":
+            pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
+    if opcode=="11101":
+        if reg_file["FLAGS"][14] == "1":
+            pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
+    if opcode=="11111":
+        if reg_file["FLAGS"][14] == "1":
+            pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
 
     if opcode == "11010":
         break
-    
     pc = decimal_to_7binary(binary_to_decimal(pc) + 1)
 
 f.close()
+print(binary_to_decimal(reg_file["R1"]))
