@@ -80,14 +80,15 @@ reg_file = {
     "FLAGS": "0"*16                  # V / L / G / E
 }
 
-count = 0
+# count = 0
 while True:
-    count += 1
+    # count += 1
     ## Execution_engine
     query = mem[binary_to_decimal(pc)].strip()              
 
     opcode = query[0:5]
 
+    print(f"{pc}\t\t",end = "")
     # Type A
     if opcode == "00000":
 
@@ -218,13 +219,9 @@ while True:
 
     if opcode == "11010":
         break
-    if count>20:
-        break
 
     print_reg()
     pc = decimal_to_7binary(binary_to_decimal(pc) + 1)
-    print(binary_to_decimal(pc))
-print(var_add)
 
 for var in var_add :
     mem.append(sixteen_bit_binary(var)+"\n")
