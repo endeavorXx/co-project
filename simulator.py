@@ -83,7 +83,7 @@ reg_file = {
 
 # count = 0
 while True:
-    # count += 1
+
     ## Execution_engine
     query = mem[binary_to_decimal(pc)].strip()              
 
@@ -159,7 +159,7 @@ while True:
     if opcode == "00011":
         reg1 = query[10:13]
         reg2 = query[13:16]
-        reg_file[registers[reg1]] = reg_file[registers[reg2]]
+        reg_file[registers[reg1]] = temp_flag
 
     if opcode == "00111":
         temp_2 = binary_to_decimal(reg_file[registers[query[10:13]]])
@@ -207,15 +207,15 @@ while True:
         pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
 
     if opcode=="11100":
-        if reg_file["FLAGS"][13]=="1":
+        if temp_flag[13]=="1":
             pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
 
     if opcode=="11101":
-        if reg_file["FLAGS"][14] == "1":
+        if temp_flag[14] == "1":
             pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
 
     if opcode=="11111":
-        if reg_file["FLAGS"][15] == "1":
+        if temp_flag[15] == "1":
             pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
 
     if opcode == "11010":
@@ -223,14 +223,15 @@ while True:
         break
 
     print_reg()
+    temp_flag = reg_file["FLAGS"]
     pc = decimal_to_7binary(binary_to_decimal(pc) + 1)
 
 for var in var_add :
     mem.append(sixteen_bit_binary(var)+"\n")
 
 for i in range(128-len(mem)):
-    mem.append("\n"+"0"*16)
+    mem.append("0"*16+"\n")
 
 for i in mem:
-    print(i,end="")
+    print(i.strip())
 f.close()
