@@ -13,7 +13,8 @@ def decimal_to_7binary(num):
 
 def print_reg():
     for reg in reg_file:
-        print(reg_file[reg]+" ",end="")
+        print(" "+reg_file[reg],end="")
+    print()
 
 def binary_to_decimal(bin):
     n = len(bin) - 1
@@ -88,7 +89,7 @@ while True:
 
     opcode = query[0:5]
 
-    print(f"{pc}\t\t",end = "")
+    print(f"{pc}       ",end="")
     # Type A
     if opcode == "00000":
 
@@ -218,6 +219,7 @@ while True:
             pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
 
     if opcode == "11010":
+        print_reg()
         break
 
     print_reg()
@@ -227,7 +229,7 @@ for var in var_add :
     mem.append(sixteen_bit_binary(var)+"\n")
 
 for i in range(128-len(mem)):
-    mem.append("0"*16+"\n")
+    mem.append("\n"+"0"*16)
 
 for i in mem:
     print(i,end="")
