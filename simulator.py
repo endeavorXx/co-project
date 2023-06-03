@@ -227,7 +227,7 @@ while True:
     pc = decimal_to_7binary(binary_to_decimal(pc) + 1)
 
 for var in var_add :
-    mem.append(sixteen_bit_binary(var)+"\n")
+    mem.append(sixteen_bit_binary(decimal_to_7binary(var_add[var]))+"\n")
 
 for i in range(128-len(mem)):
     mem.append("0"*16+"\n")
