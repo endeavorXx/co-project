@@ -88,7 +88,7 @@ while True:
     query = mem[binary_to_decimal(pc)].strip()              
 
     opcode = query[0:5]
-
+    reg_file["FLAGS"] = "0"*16
     print(f"{pc}       ",end="")
     # Type A
     if opcode == "00000":
