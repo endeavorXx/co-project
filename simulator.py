@@ -1,5 +1,5 @@
 # Note - ISA only supports whole  number arithematic
-
+import sys
 def decimal_to_7binary(num):
     "This function takes integer number and returns a string of binary no converts from decimal"
     binary = ""
@@ -66,7 +66,9 @@ registers = {
 
 f = open("output.txt")
 
-mem = f.readlines()
+mem = []
+for i in sys.stdin:
+    mem.append(i+"\n")
 
 pc = "0"*7
 
