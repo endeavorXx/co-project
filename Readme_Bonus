@@ -1,0 +1,29 @@
+Opcode: 10110
+Instruction: Bit Set
+Semantics: Sets the bit at position $Imm in reg1 to 1, where $Imm is a 4-bit value.
+Syntax: bs reg1 $Imm
+Type: B
+
+Opcode: 10111
+Instruction: Bit Clear
+Semantics: Clears the bit at position $Imm in reg1 to 0, where $Imm is a 4-bit value.
+Syntax: bc reg1 $Imm
+Type: B
+
+Opcode: 11000
+Instruction: Count Leading Zeros
+Semantics: Counts the number of leading zeros in reg1 and stores the result in reg2.
+Syntax: clz reg1 reg2
+Type: C
+
+Opcode: 11001
+Instruction: Count Leading Ones
+Semantics: Counts the number of leading ones in reg1 and stores the result in reg2.
+Syntax: clo reg1 reg2
+Type: C
+
+Opcode: 10101
+Instruction: Bit Test
+Semantics: Tests the bit at position $Imm in reg1 and sets the equal flag if the bit is 1, where $Imm is a 4-bit value.
+Syntax: bt reg1 $Imm
+Type: B
