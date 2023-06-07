@@ -475,4 +475,144 @@ for i in range(nlines):
             print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "ls":
-        code+=opcode["ls"]
+        code += opcode["ls"]
+        code += "0"
+        try:
+            if query[1] not in registers:
+                error_code = 1
+                print(f"wrong register name at line number {i+1}")
+
+            if query[1] == "FLAGS":
+                error_code = 1
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+                    
+            code += registers[query[1]]
+            num = int(query[2][1:])
+
+            if (num >= 0 and num <= 127):
+                code += sevenbitbin(decimal_to_binary(num))
+            else:
+                error_code = 1
+                print(f"value error!! Imm have range: [0,127] at line number {i}")                    
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    # Type C instruction
+
+    elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp"):
+        try:
+            if (len(query) != 3):
+                error_code = 1
+                print(
+                    f"Error at line number {i+1} can't compare more than 2 registers")
+                continue
+            if (len(query) == 3):
+                if (query[1] and query[2]) in (registers):
+                    code += opcode[query[0]] + "00000" + \
+                        registers[query[1]] + registers[query[2]]
+                    print(code)
+                else:
+                    error_code = 1
+                    print(f"Error at line number {i+1} wrong register name")
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    # Type D instruction
+
+    elif (query[0] == "ld") or (query[0] == "st"):
+        try:
+            if query[1] not in registers:
+                error_code = 1
+                print("wrong register name")
+
+            if query[2] not in var_add:
+                error_code = 1
+                print(f"undeclared variable type :{query[2]}")
+                continue
+
+            code += opcode[query[0]]+"0" + \
+                registers[query[1]]+var_add[query[2]]
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    # Type E instruction
+
+    elif query[0] == "jmp":
+        code += opcode["jmp"]
+        code += "0000"
+        try:
+            code += Find_addr(query[1]+":", List_of_words, i)
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    elif query[0] == "jlt":
+        code += opcode["jlt"]
+        code += "0000"
+        try:
+            code += Find_addr(query[1]+":", List_of_words, i)
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    elif query[0] == "jgt":
+        code += opcode["jgt"]
+        code += "0000"
+        try:
+            code += Find_addr(query[1]+":", List_of_words, i)
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    elif query[0] == "je":
+        code += opcode["je"]
+        code += "0000"
+        try:
+            code += Find_addr(query[1]+":", List_of_words, i)
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    # Type F instruction
+
+    elif (query[0] == "hlt" or (len(query) == 2 and query[1] == "hlt")):
+        ishalt = 1
+        try:
+            if query[0] == "hlt":
+                code += opcode["hlt"]
+                code += "0"*11
+                print(code)
+            elif query[1] == "hlt":
+                # checks whether a correct label is used or not by checking address
+                Find_addr(query[0], List_of_words, i)
+                code += opcode["hlt"]
+                code += "0"*11
+                print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax error at line number {i+1}")
+
+    else:
+        error_code = 1
+
+        print(f"Error at line number {i+1} wrong instruction name ")
+
+
+if ishalt == 0:
+    error_code = 1
+    print("Missing hlt instruction")
+
+if lasthalt == 0:
+    error_code = 1
+    print("Last instruction not hlt type")
+
+# f.close()
