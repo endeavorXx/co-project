@@ -1,4 +1,6 @@
-try:
-    print(4+"a")
-except:
-    print("syntax error")
+def p():
+    for i in l:
+        print(i)
+
+l = [1,2,3]
+p()

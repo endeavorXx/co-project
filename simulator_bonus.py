@@ -1,5 +1,6 @@
 # Note - ISA only supports whole  number arithematic
 import sys
+
 def decimal_to_7binary(num):
     "This function takes integer number and returns a string of binary no converts from decimal"
     binary = ""
@@ -121,6 +122,23 @@ def sixteen_bit_binaryf(text):
     text = "0"*8 + text
     return text
 
+def sixteen_bit_binarybonus(text):
+    a = len(text)
+    return "0"*(16-a) + text
+
+def count_lead(reg,bit):
+    temp = reg_file[reg]
+    count = 0
+    if bit == "0":
+        compl = "1"
+    if bit == "1":
+        compl = "0"
+    for i in range(16):
+        if temp[i] == compl:
+            break
+        count+=1
+    return count
+
 var_add={}
 
 opcode = {
@@ -145,7 +163,12 @@ opcode = {
     "hlt": "11010",
     "addf": "10000",
     "subf": "10001",
-    "movf": "10010"
+    "movf": "10010",
+    "bs": "10110",
+    "bc": "10111",
+    "clz": "11000",
+    "clo": "11001",
+    "bt": "10101"
 }
 
 registers = {
@@ -160,8 +183,7 @@ registers = {
 }
 
 f = open("output.txt")
-
-# mem = f.readlines()
+mem = f.readlines()
 mem = []
 for i in sys.stdin:
     mem.append(i + "\n")
@@ -277,6 +299,25 @@ while True:
         reg_type = registers[reg_code]
         reg_file[reg_type] = sixteen_bit_binaryf(query[9:])
 
+    if opcode == "10110":
+        reg_code = query[6:9]
+        reg_type = registers[reg_code]
+        num = binary_to_decimal(query[9:])
+        reg_file[reg_type] = registers[reg_type][:num-1] + "1" + registers[reg_type][num:]
+
+    if opcode == "10111":
+        reg_code = query[6:9]
+        reg_type = registers[reg_code]
+        num = binary_to_decimal(query[9:])
+        reg_file[reg_type] = registers[reg_type][:num-1] + "0" + registers[reg_type][num:]
+    
+    if opcode == "10101":
+        reg_code = query[6:9]
+        reg_type = registers[reg_code]
+        num = binary_to_decimal(query[9:])   
+        if reg_file[reg_type][num-1] == "1":
+            reg_file["FLAGS"] = reg_file["FLAGS"][:15]+"1"
+
     # Type C
     if opcode == "00011":
         reg1 = query[10:13]
@@ -310,7 +351,19 @@ while True:
         else:
             reg_file["FLAGS"] = "0"*16
             reg_file["FLAGS"] = reg_file["FLAGS"][:13] + "1"+ reg_file["FLAGS"][14:]
-    
+
+    if opcode == "11000":
+        reg1 = query[10:13]
+        reg2 = query[13:16]
+        num = count_lead(registers[reg1],"0")
+        reg_file[registers[reg2]] = sixteen_bit_binary(binary_to_decimal(num))
+
+    if opcode == "11001":
+        reg1 = query[10:13]
+        reg2 = query[13:16]
+        num = count_lead(registers[reg1],"1")
+        reg_file[registers[reg2]] = sixteen_bit_binary(binary_to_decimal(num))
+
     #Type D
     if opcode=="00100":
         mem_add = query[9:16]
@@ -323,7 +376,6 @@ while True:
         mem_add = query[9:16]
         var_add[mem_add] = binary_to_decimal(reg_file[registers[query[6:9]]])
     
-
     #Type E
     if opcode == "01111":
         pc = decimal_to_7binary(binary_to_decimal(query[9:16])-1)
@@ -356,4 +408,4 @@ for i in range(128-len(mem)):
 
 for i in mem:
     print(i.strip())
-# f.close()
+f.close()

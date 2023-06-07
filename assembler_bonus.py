@@ -149,7 +149,12 @@ opcode = {
     "hlt": "11010",
     "addf": "10000",
     "subf": "10001",
-    "movf": "10010"
+    "movf": "10010",
+    "bs": "10110",
+    "bc": "10111",
+    "clz": "11000",
+    "clo": "11001",
+    "bt": "10101"
 }
 
 registers = {
@@ -163,11 +168,12 @@ registers = {
     "FLAGS": "111"
 }
 
-l = []
-for i in sys.stdin:
-    l.append(i)
-# f = open("input.txt")
-# l = f.readlines()
+# l = []
+# for i in sys.stdin:
+#     l.append(i)
+f = open("input.txt")
+l = f.readlines()
+
 nlines = len(l)
 sentence_list = l
 
@@ -426,7 +432,7 @@ for i in range(nlines):
             print(f"General Syntax Error at line number {i+1}")
     
     elif (query[0] == "movf"):
-        try:
+        # try:
             if (query[2][0] == "$"):
                 if (query[1] not in registers):
                     error_code = 1
@@ -443,9 +449,9 @@ for i in range(nlines):
                     error_code = 1
                     print(f"Error at line number {i+1} value error!! Imm value not valid floating point")
                 print(code)
-        except:
-            error_code = 1
-            print(f"General Syntax Error at line number {i+1}")
+        # except:
+        #     error_code = 1
+        #     print(f"General Syntax Error at line number {i+1}")
 
     elif query[0] == "rs":
         code += opcode["rs"]
@@ -499,9 +505,74 @@ for i in range(nlines):
             error_code = 1
             print(f"General Syntax Error at line number {i+1}")
 
+    elif query[0] == "bs":
+        code += opcode["bs"]
+        code += "0"
+        try:
+            if query[1] not in registers:
+                error_code = 1
+                print(f"wrong register name at line number {i+1}")
+
+            if query[1] == "FLAGS":
+                error_code = 1
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+
+            code += registers[query[1]]
+            imm = int(query[2][1:])
+            if (imm>=1 and imm<=16):  
+                code += sevenbitbin(decimal_to_binary(imm))
+            else:
+                print(f"Error at line number {i+1} Imm have range:[1,16]")
+            print(code)
+        except:
+            print(f"General syntax error at line number {i+1}")       
+
+    elif query[0] == "bc":
+        code += opcode["bc"]
+        code += "0"
+        try:
+            if query[1] not in registers:
+                error_code = 1
+                print(f"wrong register name at line number {i+1}")
+
+            if query[1] == "FLAGS":
+                error_code = 1
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+
+            code += registers[query[1]]
+            imm = int(query[2][1:])
+            if (imm>=1 and imm<=16):  
+                code += sevenbitbin(decimal_to_binary(imm))
+            else:
+                print(f"Error at line number {i+1} Imm have range:[1,16]")
+            print(code)
+        except:
+            print(f"General syntax error at line number {i+1}")    
+
+    elif query[0] == "bt":
+        code += opcode["bt"]
+        code += "0"
+        try:
+            if query[1] not in registers:
+                error_code = 1
+                print(f"wrong register name at line number {i+1}")
+
+            if query[1] == "FLAGS":
+                error_code = 1
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+
+            code += registers[query[1]]
+            imm = int(query[2][1:])
+            if (imm>=1 and imm<=16):  
+                code += sevenbitbin(decimal_to_binary(imm))
+            else:
+                print(f"Error at line number {i+1} Imm have range:[1,16]")
+            print(code)
+        except:
+            print(f"General syntax error at line number {i+1}")    
     # Type C instruction
 
-    elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp"):
+    elif (query[0] == "div" or query[0] == "not" or query[0] == "cmp" or query[0] == "clz" or query[0] == "clo"):
         try:
             if (len(query) != 3):
                 error_code = 1
@@ -615,4 +686,4 @@ if lasthalt == 0:
     error_code = 1
     print("Last instruction not hlt type")
 
-# f.close()
+f.close()
