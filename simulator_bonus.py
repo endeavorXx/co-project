@@ -51,6 +51,9 @@ def decimal_to_binary1(num):
     return binary
 
 def float_to_decimal(a):
+    if int(a) == 0:
+        return 0
+    a = a[8:]
     b = a[3:]
     c = "1." + b
     cc = binary_to_decimal(a[:3])
@@ -75,6 +78,8 @@ def float_to_decimal(a):
     return round(count,4)
 
 def decimal_to_float(a):
+    if a == 0:
+        return "0"*8
     aa=""
     b=""
     c=a%1 #remainder
@@ -295,21 +300,21 @@ while True:
             reg_file[reg_type] = reg_file[reg_type][1:]+"0"
 
     if opcode == "10010":
-        reg_code = query[6:9]
+        reg_code = query[5:8]
         reg_type = registers[reg_code]
-        reg_file[reg_type] = sixteen_bit_binaryf(query[9:])
+        reg_file[reg_type] = sixteen_bit_binaryf(query[8:])
 
     if opcode == "10110":
         reg_code = query[6:9]
         reg_type = registers[reg_code]
         num = binary_to_decimal(query[9:])
-        reg_file[reg_type] = registers[reg_type][:num-1] + "1" + registers[reg_type][num:]
+        reg_file[reg_type] = reg_file[reg_type][:num-1] + "1" + reg_file[reg_type][num:]
 
     if opcode == "10111":
         reg_code = query[6:9]
         reg_type = registers[reg_code]
         num = binary_to_decimal(query[9:])
-        reg_file[reg_type] = registers[reg_type][:num-1] + "0" + registers[reg_type][num:]
+        reg_file[reg_type] = reg_file[reg_type][:num-1] + "0" + reg_file[reg_type][num:]
     
     if opcode == "10101":
         reg_code = query[6:9]
@@ -356,13 +361,13 @@ while True:
         reg1 = query[10:13]
         reg2 = query[13:16]
         num = count_lead(registers[reg1],"0")
-        reg_file[registers[reg2]] = sixteen_bit_binary(binary_to_decimal(num))
+        reg_file[registers[reg2]] = sixteen_bit_binary(decimal_to_binary(num))
 
     if opcode == "11001":
         reg1 = query[10:13]
         reg2 = query[13:16]
         num = count_lead(registers[reg1],"1")
-        reg_file[registers[reg2]] = sixteen_bit_binary(binary_to_decimal(num))
+        reg_file[registers[reg2]] = sixteen_bit_binary(decimal_to_binary(num))
 
     #Type D
     if opcode=="00100":
