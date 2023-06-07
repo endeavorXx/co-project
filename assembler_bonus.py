@@ -168,11 +168,11 @@ registers = {
     "FLAGS": "111"
 }
 
-# l = []
-# for i in sys.stdin:
-#     l.append(i)
-f = open("input.txt")
-l = f.readlines()
+l = []
+for i in sys.stdin:
+    l.append(i)
+# f = open("input.txt")
+# l = f.readlines()
 
 nlines = len(l)
 sentence_list = l
@@ -686,4 +686,4 @@ if lasthalt == 0:
     error_code = 1
     print("Last instruction not hlt type")
 
-f.close()
+# f.close()
