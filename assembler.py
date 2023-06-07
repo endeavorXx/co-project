@@ -37,6 +37,8 @@ def decimal_to_binary1(num):
     return binary
 
 def float_to_decimal(a):
+    if int(a) == 0:
+        return 0
     b=a[3:]
     c="1."+b
     e=binary_to_decimal(a[:3])
@@ -61,6 +63,8 @@ def float_to_decimal(a):
     return count
 
 def decimal_to_float(a):
+    if a == 0:
+        return "0"*8
     aa=""
     b=""
     c=a%1 #remainder
@@ -84,17 +88,19 @@ def decimal_to_float(a):
             nn=pos.split(".")
             pos=nn[0][0:-1]+"."+nn[0][-1]+nn[1]
             expo+=1
-        return decimal_to_binary(expo+3) + (pos.split(".")[0]+"." + pos.split(".")[1][0:5] +"0"*(5-len(pos.split(".")[1]))).split(".")[1]
+        ans=decimal_to_binary3(expo+3) + (pos.split(".")[1] + "0"*(5-len(pos.split(".")[1])))[0:5]
+        return ans
     else:
         pos=str(round(float(pos),5))
+
         while(float(pos)<1):
             pos=str(round(float(pos)*10,5))
             expo-=1
-            
+        
         nn=pos.split(".")
         pos = pos + "0"*(5-len(nn[1]))
         sx=pos.split(".")
-        ans=decimal_to_binary(expo+3) + sx[1]
+        ans=decimal_to_binary3(expo+3) + sx[1][0:5]
         
         return ans
 
@@ -433,16 +439,17 @@ for i in range(nlines):
                     print(f"wrong register name declared at line number {i+1}")
                     
                 code += opcode["movf"]
-                code += "0"
                 code += registers[query[1]]
                 flt = query[2][1:]
+                # print(float(flt))
                 flt = decimal_to_float(float(flt))
+                # print(flt)
                 if len(flt)<=8:
                     code += flt
+                    print(code)
                 else:
                     error_code = 1
                     print(f"Error at line number {i+1} value error!! Imm value not valid floating point")
-                print(code)
         except:
             error_code = 1
             print(f"General Syntax Error at line number {i+1}")
