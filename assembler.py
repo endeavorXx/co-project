@@ -12,6 +12,91 @@ def decimal_to_binary(num):
     binary = binary[::-1]  # reverses string
     return binary
 
+def binary_to_decimal(bin):
+    n = len(bin) - 1
+    num = 0
+    for i in bin:
+        num += int(i)*(2**n)
+        n = n-1
+    return num
+
+def decimal_to_binary3(num):
+    binary = ""
+    while num != 0:
+        binary += str(num % 2)
+        num = num // 2
+    binary = binary[::-1]
+    return (3-len(binary))*"0"+binary
+
+def decimal_to_binary1(num):
+    binary = ""
+    while num != 0:
+        binary += str(num % 2)
+        num = num // 2
+    binary = binary[::-1]
+    return binary
+
+def float_to_decimal(a):
+    b=a[3:]
+    c="1."+b
+    e=binary_to_decimal(a[:3])
+    cc=e-4
+    if cc>0:
+        f=str(float(c)(10*(e-3)))
+    else:
+        f="0."+"0"*(-1*cc)+"1"+c.split(".")[1]
+    count=0
+    g=f.split(".")
+    
+    count+=binary_to_decimal(g[0])
+    expo=-1
+    for i in range (0,len(g[1])):
+        if(int(g[1][i])==1):
+            count+=2**(expo)
+            expo-=1
+        else:
+            expo-=1
+            continue
+            
+    return count
+
+def decimal_to_float(a):
+    aa=""
+    b=""
+    c=a%1 #remainder
+    d=a//1 #whole no.
+  
+    e=0
+    while(e!=5):
+        if c*2>=1:
+            b+="1"
+            c=c*2-1
+        else:
+            b+="0"
+            c=c*2
+        e+=1
+    aa=decimal_to_binary1(int(d))
+    pos=aa+"."+b
+    expo=0
+    pos=str(round(float(pos),5))
+    if float(pos)>1:
+        while(float(pos)>2):
+            nn=pos.split(".")
+            pos=nn[0][0:-1]+"."+nn[0][-1]+nn[1]
+            expo+=1
+        return decimal_to_binary(expo+3) + (pos.split(".")[0]+"." + pos.split(".")[1][0:5] +"0"*(5-len(pos.split(".")[1]))).split(".")[1]
+    else:
+        pos=str(round(float(pos),5))
+        while(float(pos)<1):
+            pos=str(round(float(pos)*10,5))
+            expo-=1
+            
+        nn=pos.split(".")
+        pos = pos + "0"*(5-len(nn[1]))
+        sx=pos.split(".")
+        ans=decimal_to_binary(expo+3) + sx[1]
+        
+        return ans
 
 def Find_addr(label, list1, line_num):
     "This function finds the address of a label used for jump statements"
@@ -61,7 +146,10 @@ opcode = {
     "jlt": "11100",
     "jgt": "11101",
     "je": "11111",
-    "hlt": "11010"
+    "hlt": "11010",
+    "addf": "10000",
+    "subf": "10001",
+    "movf": "10010"
 }
 
 registers = {
@@ -78,6 +166,8 @@ registers = {
 l = []
 for i in sys.stdin:
     l.append(i)
+# f = open("input.txt")
+# l = f.readlines()
 nlines = len(l)
 sentence_list = l
 
@@ -213,8 +303,7 @@ for i in range(nlines):
 
             if (query[3] == "FLAGS"):
                 error_code = 1
-                print(
-                    f"Error at line number {i+1} Illegal use of Flag register")
+                print(f"Error at line number {i+1} Illegal use of Flag register")
 
             code += registers[query[1]]
             code += registers[query[2]]
@@ -265,6 +354,46 @@ for i in range(nlines):
             error_code = 1
             print(f"General Syntax Error at line number {i+1}")
 
+    elif query[0] == "addf":
+        code += opcode["addf"]
+        code += "00"
+        try:
+            if ((query[1] or query[2] or query[3]) not in (registers)):
+                error_code = 1
+                print(f"Error at line number {i+1} wrong register name")
+
+            if (query[3] == "FLAGS"):
+                error_code = 1
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+                    
+            code += registers[query[1]]
+            code += registers[query[2]]
+            code += registers[query[3]]
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
+    elif query[0] == "subf":
+        code += opcode["subf"]
+        code += "00"
+        try:
+            if ((query[1] or query[2] or query[3]) not in (registers)):
+                error_code = 1
+                print(f"Error at line number {i+1} wrong register name")
+
+            if (query[3] == "FLAGS"):
+                error_code = 1
+                print(f"Error at line number {i+1} Illegal use of Flag register")
+                    
+            code += registers[query[1]]
+            code += registers[query[2]]
+            code += registers[query[3]]
+            print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+
     # Type B instruction
     elif (query[0] == "mov"):
         try:
@@ -292,6 +421,28 @@ for i in range(nlines):
                     code += opcode[query[0]][1] + "00000" + \
                         registers[query[1]] + registers[query[2]]
             print(code)
+        except:
+            error_code = 1
+            print(f"General Syntax Error at line number {i+1}")
+    
+    elif (query[0] == "movf"):
+        try:
+            if (query[2][0] == "$"):
+                if (query[1] not in registers):
+                    error_code = 1
+                    print(f"wrong register name declared at line number {i+1}")
+                    
+                code += opcode["movf"]
+                code += "0"
+                code += registers[query[1]]
+                flt = query[2][1:]
+                flt = decimal_to_float(float(flt))
+                if len(flt)<=8:
+                    code += flt
+                else:
+                    error_code = 1
+                    print(f"Error at line number {i+1} value error!! Imm value not valid floating point")
+                print(code)
         except:
             error_code = 1
             print(f"General Syntax Error at line number {i+1}")
@@ -463,3 +614,5 @@ if ishalt == 0:
 if lasthalt == 0:
     error_code = 1
     print("Last instruction not hlt type")
+
+# f.close()
