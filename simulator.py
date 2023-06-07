@@ -11,6 +11,15 @@ def decimal_to_7binary(num):
     binary = "0"*(7-n) + binary
     return binary
 
+def decimal_to_binary(num):
+    "This function takes integer number and returns a string of binary no converts from decimal"
+    binary = ""
+    while num != 0:
+        binary += str(num % 2)
+        num = num // 2
+    binary = binary[::-1]  # reverses string
+    return binary
+
 def print_reg():
     for reg in reg_file:
         print(" "+reg_file[reg],end="")
@@ -24,9 +33,92 @@ def binary_to_decimal(bin):
         n = n-1
     return num
 
+def decimal_to_binary3(num):
+    binary = ""
+    while num != 0:
+        binary += str(num % 2)
+        num = num // 2
+    binary = binary[::-1]
+    return (3-len(binary))*"0"+binary
 
+def decimal_to_binary1(num):
+    binary = ""
+    while num != 0:
+        binary += str(num % 2)
+        num = num // 2
+    binary = binary[::-1]
+    return binary
+
+def float_to_decimal(a):
+    b = a[3:]
+    c = "1." + b
+    cc = binary_to_decimal(a[:3])
+    
+    if cc > 0:
+        f = str(float(c) * (10 ** (cc - 3)))
+    elif cc == 0:
+        f = c
+    else:
+        f = "0." + "0" * (-1 * cc) + "1" + c.split(".")[1]
+    
+    count = 0
+    g = f.split(".")
+    count += binary_to_decimal(g[0])
+    expo = -1
+    
+    for i in range(0, len(g[1])):
+        if int(g[1][i]) == 1:
+            count += 2 ** expo
+        expo -= 1
+    
+    return round(count,4)
+
+def decimal_to_float(a):
+    aa=""
+    b=""
+    c=a%1 #remainder
+    d=a//1 #whole no.
+  
+    e=0
+    while(e!=5):
+        if c*2>=1:
+            b+="1"
+            c=c*2-1
+        else:
+            b+="0"
+            c=c*2
+        e+=1
+    aa=decimal_to_binary1(int(d))
+    pos=aa+"."+b
+    expo=0
+    pos=str(round(float(pos),5))
+    if float(pos)>1:
+        while(float(pos)>2):
+            nn=pos.split(".")
+            pos=nn[0][0:-1]+"."+nn[0][-1]+nn[1]
+            expo+=1
+        ans=decimal_to_binary3(expo+3) + (pos.split(".")[1] + "0"*(5-len(pos.split(".")[1])))[0:5]
+        return ans
+    else:
+        pos=str(round(float(pos),5))
+
+        while(float(pos)<1):
+            pos=str(round(float(pos)*10,5))
+            expo-=1
+        
+        nn=pos.split(".")
+        pos = pos + "0"*(5-len(nn[1]))
+        sx=pos.split(".")
+        ans=decimal_to_binary3(expo+3) + sx[1][0:5]
+        
+        return ans
+    
 def sixteen_bit_binary(text):
     text = "0"*9 + text
+    return text
+
+def sixteen_bit_binaryf(text):
+    text = "0"*8 + text
     return text
 
 var_add={}
@@ -50,7 +142,10 @@ opcode = {
     "jlt": "11100",
     "jgt": "11101",
     "je": "11111",
-    "hlt": "11010"
+    "hlt": "11010",
+    "addf": "10000",
+    "subf": "10001",
+    "movf": "10010"
 }
 
 registers = {
@@ -64,11 +159,12 @@ registers = {
     "111": "FLAGS"
 }
 
-f = open("output.txt")
+# f = open("output.txt")
 
+# mem = f.readlines()
 mem = []
 for i in sys.stdin:
-    mem.append(i+"\n")
+    mem.append(i + "\n")
 
 pc = "0"*7
 
@@ -84,6 +180,7 @@ reg_file = {
 }
 
 # count = 0
+temp_flag = "0"*16
 while True:
 
     ## Execution_engine
@@ -137,6 +234,24 @@ while True:
         temp_3 = binary_to_decimal(reg_file[registers[query[13:16]]])
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(decimal_to_7binary(temp_2 & temp_3))
 
+    if opcode == "10000":
+        temp_1 = float_to_decimal(reg_file[registers[query[10:13]]])
+        temp_2 = float_to_decimal(reg_file[registers[query[13:16]]])
+        if (len(decimal_to_float(temp_1+temp_2))>8):
+            reg_file["R0"] = "0"*16
+            reg_file["FLAGS"] = reg_file["FLAGS"][:12] + "1" + reg_file["FLAGS"][13:]  
+        else:
+            reg_file[registers[query[7:10]]] = sixteen_bit_binaryf(decimal_to_float(temp_1 + temp_2))
+    
+    if opcode == "10001":
+        temp_1 = float_to_decimal(reg_file[registers[query[10:13]]])
+        temp_2 = float_to_decimal(reg_file[registers[query[13:16]]])
+        if (temp_2>temp_1):
+            reg_file["R1"] = "0"*16
+            reg_file["FLAGS"] = reg_file["FLAGS"][:12] + "1" + reg_file["FLAGS"][13:]
+        else:
+            reg_file[registers[query[7:10]]] = sixteen_bit_binaryf(decimal_to_float(temp_1 - temp_2))
+    
     # Type B
     if opcode == "00010":
         reg_code = query[6:9]
@@ -156,6 +271,11 @@ while True:
         num = binary_to_decimal(query[9:])
         for i in range(num):
             reg_file[reg_type] = reg_file[reg_type][1:]+"0"
+
+    if opcode == "10010":
+        reg_code = query[6:9]
+        reg_type = registers[reg_code]
+        reg_file[reg_type] = sixteen_bit_binaryf(query[9:])
 
     # Type C
     if opcode == "00011":
@@ -236,4 +356,4 @@ for i in range(128-len(mem)):
 
 for i in mem:
     print(i.strip())
-f.close()
+# f.close()
