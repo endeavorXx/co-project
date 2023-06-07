@@ -1,0 +1,20 @@
+Test case1 - 
+bs R1 $12
+bc R1 $12
+bs R2 $12
+clz R2 R3
+clo R2 R4
+bt R2 $12
+hlt
+
+Test case2 - 
+mov R1 $5
+bt R1 $16
+clz R1 R4
+hlt
+
+Test case3 - 
+bs R1 $15
+bs R1 $14
+bs R1 $12
+hlt
