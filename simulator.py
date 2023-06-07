@@ -50,6 +50,10 @@ def decimal_to_binary1(num):
     return binary
 
 def float_to_decimal(a):
+    if int(a) == 0:
+        return 0
+    a = a[8:]
+    # print(a)
     b = a[3:]
     c = "1." + b
     cc = binary_to_decimal(a[:3])
@@ -71,9 +75,11 @@ def float_to_decimal(a):
             count += 2 ** expo
         expo -= 1
     
-    return round(count,4)
+    return round(count,3)
 
 def decimal_to_float(a):
+    if a == 0:
+        return "0"*8
     aa=""
     b=""
     c=a%1 #remainder
@@ -159,12 +165,12 @@ registers = {
     "111": "FLAGS"
 }
 
-# f = open("output.txt")
+f = open("output.txt")
+mem = f.readlines()
 
-# mem = f.readlines()
-mem = []
-for i in sys.stdin:
-    mem.append(i + "\n")
+# mem = []
+# for i in sys.stdin:
+#     mem.append(i + "\n")
 
 pc = "0"*7
 
@@ -235,8 +241,12 @@ while True:
         reg_file[registers[query[7:10]]] = sixteen_bit_binary(decimal_to_7binary(temp_2 & temp_3))
 
     if opcode == "10000":
+        # print(reg_file[registers[query[10:13]]])
+        # print(reg_file[registers[query[13:16]]])
         temp_1 = float_to_decimal(reg_file[registers[query[10:13]]])
         temp_2 = float_to_decimal(reg_file[registers[query[13:16]]])
+        # print(temp_1)
+        # print(temp_2)
         if (len(decimal_to_float(temp_1+temp_2))>8):
             reg_file["R0"] = "0"*16
             reg_file["FLAGS"] = reg_file["FLAGS"][:12] + "1" + reg_file["FLAGS"][13:]  
@@ -246,6 +256,8 @@ while True:
     if opcode == "10001":
         temp_1 = float_to_decimal(reg_file[registers[query[10:13]]])
         temp_2 = float_to_decimal(reg_file[registers[query[13:16]]])
+        # print(temp_1)
+        # print(temp_2)
         if (temp_2>temp_1):
             reg_file["R1"] = "0"*16
             reg_file["FLAGS"] = reg_file["FLAGS"][:12] + "1" + reg_file["FLAGS"][13:]
@@ -273,9 +285,9 @@ while True:
             reg_file[reg_type] = reg_file[reg_type][1:]+"0"
 
     if opcode == "10010":
-        reg_code = query[6:9]
+        reg_code = query[5:8]
         reg_type = registers[reg_code]
-        reg_file[reg_type] = sixteen_bit_binaryf(query[9:])
+        reg_file[reg_type] = sixteen_bit_binaryf(query[8:])
 
     # Type C
     if opcode == "00011":
@@ -356,4 +368,4 @@ for i in range(128-len(mem)):
 
 for i in mem:
     print(i.strip())
-# f.close()
+f.close()
