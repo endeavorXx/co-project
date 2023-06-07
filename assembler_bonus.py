@@ -37,6 +37,8 @@ def decimal_to_binary1(num):
     return binary
 
 def float_to_decimal(a):
+    if int(a) == 0:
+        return 0
     b=a[3:]
     c="1."+b
     e=binary_to_decimal(a[:3])
@@ -61,6 +63,8 @@ def float_to_decimal(a):
     return count
 
 def decimal_to_float(a):
+    if a == 0:
+        return "0"*8
     aa=""
     b=""
     c=a%1 #remainder
@@ -439,7 +443,6 @@ for i in range(nlines):
                     print(f"wrong register name declared at line number {i+1}")
                     
                 code += opcode["movf"]
-                code += "0"
                 code += registers[query[1]]
                 flt = query[2][1:]
                 flt = decimal_to_float(float(flt))
