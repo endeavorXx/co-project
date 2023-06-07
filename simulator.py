@@ -165,12 +165,12 @@ registers = {
     "111": "FLAGS"
 }
 
-f = open("output.txt")
-mem = f.readlines()
+# f = open("output.txt")
+# mem = f.readlines()
 
-# mem = []
-# for i in sys.stdin:
-#     mem.append(i + "\n")
+mem = []
+for i in sys.stdin:
+    mem.append(i + "\n")
 
 pc = "0"*7
 
@@ -368,4 +368,4 @@ for i in range(128-len(mem)):
 
 for i in mem:
     print(i.strip())
-f.close()
+# f.close()
